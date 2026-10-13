@@ -1,0 +1,150 @@
+{
+  "spec_version": "1.0",
+  "id": "jou-eportal-drcom",
+  "name": "JOU 校园网（Dr.COM / eportal 门户）",
+  "description": "由 tools/make_plugin_from_legacy.py 从旧程序内置匹配规则自动生成：Dr.COM eportal（含 Dr1003 回调）网页认证门户。目录名 = WiFi 名称 = JOU。",
+  "wifi": "JOU",
+  "need_login": true,
+  "generated": {
+    "by": "tools/make_plugin_from_legacy.py",
+    "at": "2026-10-13 06:29:36",
+    "portal_type": "eportal-drcom"
+  },
+  "login": {
+    "url": "http://210.28.39.250/",
+    "url_patterns": [
+      "*eportal*",
+      "*drcom*",
+      "*dr1003*"
+    ],
+    "driver": "auto",
+    "timeout_seconds": 10,
+    "js_wait_seconds": 2,
+    "form": {
+      "name": "f1",
+      "selector": "form[name='f1']"
+    },
+    "submit": {
+      "selector": "input[name='0MKKey']",
+      "value": "登录",
+      "page_function": "ee(1)",
+      "fallback": "form.submit()"
+    },
+    "success": {
+      "url_patterns": [
+        "eportal",
+        "index",
+        "portal",
+        "210.28.39.250"
+      ],
+      "keywords": [
+        "注销",
+        "退出",
+        "已登录",
+        "登录成功",
+        "logout",
+        "success"
+      ],
+      "failure_keywords": [
+        "密码错误",
+        "账号或密码",
+        "用户不存在",
+        "已欠费",
+        "认证失败",
+        "登录失败",
+        "error"
+      ]
+    },
+    "captcha": {
+      "enabled": false,
+      "input_selector": "input[name='captcha']",
+      "image_selector": "#captcha_img"
+    }
+  },
+  "credentials": [
+    {
+      "key": "account",
+      "label": "账号",
+      "type": "text",
+      "required": true,
+      "placeholder": "上网账号",
+      "js_selector": "input[name='DDDDD']",
+      "from_js": true,
+      "help": "由 login.js 的 fill() 按 js_selector 写入；值来自 config.json 的 networks[JOU].login.credentials"
+    },
+    {
+      "key": "password",
+      "label": "密码",
+      "type": "password",
+      "required": true,
+      "placeholder": "上网密码",
+      "js_selector": "input[name='upass']",
+      "from_js": true,
+      "help": "由 login.js 的 fill() 按 js_selector 写入；值来自 config.json 的 networks[JOU].login.credentials"
+    }
+  ],
+  "options": [
+    {
+      "key": "isp",
+      "label": "运营商",
+      "type": "select",
+      "required": false,
+      "js_selector": "select[name='ISP_select']",
+      "from_js": true,
+      "choices": [
+        {
+          "value": "-1",
+          "label": "请选择运营商"
+        },
+        {
+          "value": "@cmcc",
+          "label": "中国移动"
+        },
+        {
+          "value": "@unicom",
+          "label": "中国联通"
+        },
+        {
+          "value": "@telecom",
+          "label": "中国电信"
+        },
+        {
+          "value": "",
+          "label": "校园网"
+        }
+      ],
+      "default": "",
+      "help": "“校园网”选项仅限访问校内数字资源和学术期刊资源。"
+    }
+  ],
+  "http": {
+    "attempts": [
+      {
+        "name": "eportal-801-login",
+        "method": "GET",
+        "url": "http://210.28.39.250:801/eportal/?c=Portal&a=login&callback=dr1003&login_method=1&user_account=,0,{account}&user_password={password}&wlan_user_ip={ip}&wlan_user_ipv6=&wlan_user_mac=000000000000&wlan_user_vlan=&wlan_ac_ip=&wlan_ac_name=&jsVersion=3.3.3&v={ts}",
+        "success": {
+          "contains": [
+            "\"result\":1"
+          ],
+          "not_contains": [
+            "\"result\":0"
+          ]
+        }
+      },
+      {
+        "name": "eportal-80-login",
+        "method": "GET",
+        "url": "http://210.28.39.250/eportal/?c=Portal&a=login&callback=dr1003&login_method=1&user_account=,0,{account}&user_password={password}&wlan_user_ip={ip}&wlan_user_ipv6=&wlan_user_mac=000000000000&wlan_user_vlan=&wlan_ac_ip=&wlan_ac_name=&jsVersion=3.3.3&v={ts}",
+        "success": {
+          "contains": [
+            "\"result\":1"
+          ],
+          "not_contains": [
+            "\"result\":0"
+          ]
+        }
+      }
+    ]
+  }
+}

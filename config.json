@@ -1,0 +1,186 @@
+{
+  "_comment": "CampusNet 通用配置。可被 GUI 修改；守护进程每次循环重新读取，改完即生效。",
+  "app": {
+    "name": "CampusNet",
+    "version": "2.0.0",
+    "ui": {
+      "theme": "light",
+      "start_minimized": true,
+      "close_to_tray": true,
+      "tray_show_network_status": true
+    },
+    "startup": {
+      "autostart": false,
+      "autostart_delay_seconds": 20,
+      "scheduled_tasks": false,
+      "task_prefix": "CampusNet"
+    }
+  },
+  "wlan": {
+    "interface": "WLAN",
+    "connect_timeout": 25,
+    "verify_after_connect": true
+  },
+  "networks": {
+    "HUAWEI122": {
+      "profile": "HUAWEI122",
+      "label": "计费网络",
+      "need_login": false,
+      "plugin": "HUAWEI122",
+      "login": {
+        "enabled": null,
+        "url": "",
+        "driver": "",
+        "credentials": {},
+        "options": {},
+        "timeout_seconds": 0
+      },
+      "guard": {
+        "enabled": true,
+        "speed": {
+          "value": 2.0,
+          "unit": "MB/s"
+        },
+        "sustained_seconds": 10,
+        "volume": {
+          "value": 50.0,
+          "unit": "MB"
+        },
+        "sample_interval_seconds": 2,
+        "deny_keeps_disconnected": true,
+        "inspect_processes": true,
+        "top_processes": 5
+      },
+      "name": "HUAWEI122"
+    },
+    "JOU": {
+      "profile": "JOU",
+      "label": "校园网络",
+      "need_login": true,
+      "plugin": "JOU",
+      "login": {
+        "url": "http://210.28.39.250/",
+        "driver": "",
+        "credentials": {
+          "account": "YOUR_STUDENT_ID",
+          "password": "YOUR_PASSWORD"
+        },
+        "options": {
+          "isp": "@unicom"
+        }
+      },
+      "guard": {
+        "enabled": false
+      },
+      "name": "JOU"
+    }
+  },
+  "health": {
+    "enabled": true,
+    "interval_seconds": 60,
+    "ping_target": "www.baidu.com",
+    "ping_timeout_ms": 3000,
+    "fail_threshold": 3,
+    "restart": {
+      "enabled": true,
+      "cooldown_seconds": 300,
+      "prefer_adapter_recycle": true,
+      "reconnect_after_restart": true
+    }
+  },
+  "schedules": [
+    {
+      "id": "legacy-billing",
+      "name": "连接计费网络 HUAWEI122",
+      "enabled": true,
+      "action": "connect",
+      "target_network": "HUAWEI122",
+      "need_login": false,
+      "time": "22:00",
+      "window_minutes": 180,
+      "retry_interval_seconds": 300,
+      "max_attempts_per_day": 10,
+      "repeat": {
+        "mode": "weekly",
+        "weekdays": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "days": [],
+        "months": [],
+        "date": ""
+      }
+    },
+    {
+      "id": "legacy-campus",
+      "name": "切换到校园网络 JOU",
+      "enabled": true,
+      "action": "connect",
+      "target_network": "JOU",
+      "need_login": true,
+      "time": "06:10",
+      "window_minutes": 180,
+      "retry_interval_seconds": 300,
+      "max_attempts_per_day": 10,
+      "repeat": {
+        "mode": "weekly",
+        "weekdays": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "days": [],
+        "months": [],
+        "date": ""
+      }
+    }
+  ],
+  "traffic": {
+    "enabled": true,
+    "sample_interval_seconds": 2,
+    "inspect_processes": true,
+    "top_processes": 5,
+    "defaults": {
+      "enabled": false,
+      "speed": {
+        "value": 2.0,
+        "unit": "MB/s"
+      },
+      "sustained_seconds": 10,
+      "volume": {
+        "value": 50.0,
+        "unit": "MB"
+      },
+      "sample_interval_seconds": 2,
+      "deny_keeps_disconnected": true,
+      "inspect_processes": true,
+      "top_processes": 5
+    }
+  },
+  "portal": {
+    "driver": "auto",
+    "browser": "edge",
+    "headless": false,
+    "timeout_seconds": 10,
+    "js_wait_seconds": 2,
+    "allow_requests_fallback": true,
+    "verify_tls": false,
+    "plugins_dir": "",
+    "auto_discover_options": false
+  },
+  "popup": {
+    "enabled": true,
+    "title": "CampusNet 提醒",
+    "timeout_seconds": 0,
+    "deny_keeps_disconnected": true
+  },
+  "logging": {
+    "level": "INFO",
+    "max_bytes": 2097152,
+    "backup_count": 5,
+    "memory_records": 500
+  }
+}

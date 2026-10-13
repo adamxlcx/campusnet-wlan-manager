@@ -1,0 +1,17 @@
+# CampusNet 依赖（通用化核心引擎 + 插件体系 + PyQt5 桌面 GUI）
+# 安装： pip install -r requirements.txt
+
+psutil>=5.9.0        # 网卡计数器读取、进程流量排行
+requests>=2.28.0     # 网页登录的 HTTP 备用通道
+
+# 浏览器通道（主通道）：Selenium 注入插件 login.js 完成匹配/填表/提交/成功判定。
+# 需要本机已安装 Edge 或 Chrome（本机两者均已安装）。
+selenium>=4.15.0
+
+# GUI 层：系统托盘常驻、明/暗主题、左侧导航分页、各功能配置表单。
+# 仅 GUI 需要；只跑 cli.py 时可不安（核心层不依赖 PyQt5）。
+PyQt5>=5.15.0
+
+# 说明：
+#   * tkinter 为标准库，弹窗无需额外安装（弹窗行为与旧版一致）。
+#   * 无需 Node.js：插件是纯 JS 文件，由浏览器执行，不经 Node 运行。
